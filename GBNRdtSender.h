@@ -1,6 +1,5 @@
-#pragma once
-//#ifndef STOP_WAIT_RDT_SENDER_H
-//#define STOP_WAIT_RDT_SENDER_H
+#ifndef GBN_RDT_SENDER_H
+#define GBN_RDT_SENDER_H
 #include "RdtSender.h"
 class GBNRdtSender :public RdtSender
 {
@@ -22,4 +21,4 @@ public:
 	virtual ~GBNRdtSender();
 };
 
-//#endif
+#endif

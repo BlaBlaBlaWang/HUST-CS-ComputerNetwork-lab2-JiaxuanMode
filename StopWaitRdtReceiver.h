@@ -12,8 +12,8 @@ public:
 	virtual ~StopWaitRdtReceiver();
 
 public:
-	
-	void receive(const Packet &packet);	//接收报文，将被NetworkService调用
+
+	void receive(const Packet& packet);	//接收报文，将被NetworkService调用
 };
 
 #endif

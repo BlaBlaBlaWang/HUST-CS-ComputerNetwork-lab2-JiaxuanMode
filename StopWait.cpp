@@ -1,12 +1,14 @@
 // StopWait.cpp : 定义控制台应用程序的入口点。
 //
-
+#define GBN_RDT_RECEIVER_H 1
+#define GBN_RDT_SENDER_H 1
 #include "stdafx.h"
 #include "Global.h"
 #include "RdtSender.h"
 #include "RdtReceiver.h"
 #include "StopWaitRdtSender.h"
 #include "StopWaitRdtReceiver.h"
+#include "GBNRdtReceiver.h"
 
 
 int main(int argc, char* argv[])
@@ -18,8 +20,8 @@ int main(int argc, char* argv[])
 	pns->init();
 	pns->setRtdSender(ps);
 	pns->setRtdReceiver(pr);
-	pns->setInputFile("C:\\Users\\Dell\\Desktop\\input.txt");
-	pns->setOutputFile("C:\\Users\\Dell\\Desktop\\output.txt");
+	pns->setInputFile("input.txt");
+	pns->setOutputFile("output.txt");
 
 	pns->start();
 
