@@ -1,0 +1,2 @@
+C:\Users\Dell\Desktop\实验二\模块二 RDT代码（学生用）\Windows VS2017\StopWait\Debug\StopWait.exe
+C:\Users\Dell\Desktop\实验二\模块二 RDT代码（学生用）\Windows VS2017\StopWait\Debug\StopWait.pdb
