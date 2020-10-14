@@ -27,6 +27,15 @@
     <ClCompile Include="StopWaitRdtSender.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="GBNRdtSender.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GBNRdtReceiver.h">
+      <Filter>头文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GBNRdtReceiver.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DataStructure.h">
@@ -60,6 +69,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Tool.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GBNRdtSender.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
