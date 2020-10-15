@@ -1,12 +1,10 @@
 ﻿cl : 命令行 warning D9035: “Gm”选项已否决，并将在将来的版本中移除
+  stdafx.cpp
+cl : 命令行 warning D9035: “Gm”选项已否决，并将在将来的版本中移除
+  StopWaitRdtSender.cpp
+  StopWaitRdtReceiver.cpp
   StopWait.cpp
-E:\实验二-全套\模块二 RDT代码（学生用）\Windows VS2017\StopWait\StopWait.cpp(6): warning C4603: “STOP_WAIT_RDT_RECEIVER_H”: 未定义宏或在预编译头使用后定义发生改变
-E:\实验二-全套\模块二 RDT代码（学生用）\Windows VS2017\StopWait\StopWait.cpp(6): message : 将宏添加到预编译头中，而不是在此处定义
-E:\实验二-全套\模块二 RDT代码（学生用）\Windows VS2017\StopWait\StopWait.cpp(9): message : 使用预编译头
-E:\实验二-全套\模块二 RDT代码（学生用）\Windows VS2017\StopWait\StopWait.cpp(7): warning C4603: “STOP_WAIT_RDT_SENDER_H”: 未定义宏或在预编译头使用后定义发生改变
-E:\实验二-全套\模块二 RDT代码（学生用）\Windows VS2017\StopWait\StopWait.cpp(7): message : 将宏添加到预编译头中，而不是在此处定义
-E:\实验二-全套\模块二 RDT代码（学生用）\Windows VS2017\StopWait\StopWait.cpp(9): message : 使用预编译头
-E:\实验二-全套\模块二 RDT代码（学生用）\Windows VS2017\StopWait\StopWait.cpp(8): warning C4603: “NONE_STOP_WAIT_RDT_SENDER_MODE”: 未定义宏或在预编译头使用后定义发生改变
-E:\实验二-全套\模块二 RDT代码（学生用）\Windows VS2017\StopWait\StopWait.cpp(8): message : 将宏添加到预编译头中，而不是在此处定义
-E:\实验二-全套\模块二 RDT代码（学生用）\Windows VS2017\StopWait\StopWait.cpp(9): message : 使用预编译头
+  GBNRdtSender.cpp
+  GBNRdtReceiver.cpp
+  正在生成代码...
   StopWait.vcxproj -> E:\实验二-全套\模块二 RDT代码（学生用）\Windows VS2017\StopWait\Debug\StopWait.exe
