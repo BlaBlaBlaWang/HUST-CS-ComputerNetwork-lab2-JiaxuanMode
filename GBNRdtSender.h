@@ -1,14 +1,17 @@
 #ifndef GBN_RDT_SENDER_H
 #define GBN_RDT_SENDER_H
 #include "RdtSender.h"
+using std::queue;
+
 class GBNRdtSender :public RdtSender
 {
 private:
-	int expectSequenceNumberSend;	// 下一个发送序号 
+	int nextSequenceNumber;			// 下一个发送序号 
 	bool waitingState;				// 是否处于等待Ack的状态
-	Packet packetWaitingAck;		//已发送并等待Ack的数据包
 	static int windowSize;
-
+	queue <Packet> packetWindow;	//已发送并等待Ack的数据包queue，根据窗口大小，一共维护4个实例的queue队列
+	int base;						//记录发送窗口的当前序号
+	int nextseqnum;
 public:
 
 	bool getWaitingState();

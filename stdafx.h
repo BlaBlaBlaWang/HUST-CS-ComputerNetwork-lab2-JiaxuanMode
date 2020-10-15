@@ -9,6 +9,7 @@
 
 #include <stdio.h>
 #include <tchar.h>
+#include <queue>
 
 // TODO: 在此处引用程序需要的其他头文件
 #pragma comment (lib,"netsimlib.lib")

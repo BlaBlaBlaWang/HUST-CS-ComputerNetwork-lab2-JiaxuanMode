@@ -3,7 +3,7 @@
 #include "GBNRdtSender.h"
 
 
-GBNRdtSender::GBNRdtSender() :expectSequenceNumberSend(0), waitingState(false)
+GBNRdtSender::GBNRdtSender() :nextseqnum(0), waitingState(false)
 {
 }
 
@@ -19,52 +19,63 @@ bool GBNRdtSender::getWaitingState() {
 }
 
 int GBNRdtSender::windowSize = 4;
+//在GBNRdtSender的定义之外定义static数据类型，规范窗口的大小，窗口中的报文用queue进行管理，并于windowSize进行比较
 
 bool GBNRdtSender::send(const Message& message) {
-	if (this->waitingState) { //发送方处于等待确认状态
+	if (this->nextseqnum>=this->base+this->windowSize) { //发送方处于等待确认状态
 		return false;
 	}
+	else {
+		const Packet& insertPacket = Packet::Packet();
+		this->packetWindow.push(insertPacket);
+		this->packetWindow.back().acknum = -1; //忽略该字段
+		this->packetWindow.back().seqnum = this->nextseqnum;
+		this->packetWindow.back().checksum = 0;
+		memcpy(this->packetWindow.back().payload, message.data, sizeof(message.data));
+		this->packetWindow.back().checksum = pUtils->calculateCheckSum(this->packetWindow.back());
+		pUtils->printPacket("发送方发送报文", this->packetWindow.back());
+		pns->sendToNetworkLayer(RECEIVER, this->packetWindow.back());								//调用模拟网络环境的sendToNetworkLayer，通过网络层发送到对方
 
-	this->packetWaitingAck.acknum = -1; //忽略该字段
-	this->packetWaitingAck.seqnum = this->expectSequenceNumberSend;
-	this->packetWaitingAck.checksum = 0;
-	memcpy(this->packetWaitingAck.payload, message.data, sizeof(message.data));
-	this->packetWaitingAck.checksum = pUtils->calculateCheckSum(this->packetWaitingAck);
-	pUtils->printPacket("发送方发送报文", this->packetWaitingAck);
-	pns->startTimer(SENDER, Configuration::TIME_OUT, this->packetWaitingAck.seqnum);			//启动发送方定时器
-	pns->sendToNetworkLayer(RECEIVER, this->packetWaitingAck);								//调用模拟网络环境的sendToNetworkLayer，通过网络层发送到对方
+		if (this->base==this->nextseqnum)
+			pns->startTimer(SENDER, Configuration::TIME_OUT, this->packetWindow.front().seqnum);	//以第一个元素为基准设置超时			//启动发送方定时器
 
-	this->waitingState = true;																					//进入等待状态
-	return true;
+		this->nextseqnum = (this->nextseqnum++) % 8; //接收序号在0-7之间切换																			//进入等待状态
+		return true;
+	}
 }
 
 void GBNRdtSender::receive(const Packet& ackPkt) {
-	if (this->waitingState == true) {//如果发送方处于等待ack的状态，作如下处理；否则什么都不做
-		//检查校验和是否正确
-		int checkSum = pUtils->calculateCheckSum(ackPkt);
+	//检查校验和是否正确
+	int checkSum = pUtils->calculateCheckSum(ackPkt);
 
-		//如果校验和正确，并且确认序号=发送方已发送并等待确认的数据包序号
-		if (checkSum == ackPkt.checksum && ackPkt.acknum == this->packetWaitingAck.seqnum) {
-			this->expectSequenceNumberSend = 1 - this->expectSequenceNumberSend;			//下一个发送序号在0-1之间切换
-			this->waitingState = false;
+	//如果校验和正确，并且确认序号=发送方已发送并等待确认的数据包序号
+	if (checkSum == ackPkt.checksum) {
+		this->packetWindow.pop();
+		this->base = ackPkt.acknum + 1;
+		if(this->base==this->nextseqnum) {
 			pUtils->printPacket("发送方正确收到确认", ackPkt);
-			pns->stopTimer(SENDER, this->packetWaitingAck.seqnum);		//关闭定时器
+			pns->stopTimer(SENDER, ackPkt.seqnum);		//关闭定时器
 		}
 		else {
-			pUtils->printPacket("发送方没有正确收到确认，重发上次发送的报文", this->packetWaitingAck);
-			pns->stopTimer(SENDER, this->packetWaitingAck.seqnum);									//首先关闭定时器
-			pns->startTimer(SENDER, Configuration::TIME_OUT, this->packetWaitingAck.seqnum);			//重新启动发送方定时器
-			pns->sendToNetworkLayer(RECEIVER, this->packetWaitingAck);								//重新发送数据包
-
+			pns->stopTimer(SENDER, ackPkt.seqnum);										//首先关闭定时器
+			pns->startTimer(SENDER, Configuration::TIME_OUT, ackPkt.seqnum);			//重新启动发送方定时器
 		}
 	}
+	else {}	//GBN中如果包出现了错误就什么也不做
 }
 
 void GBNRdtSender::timeoutHandler(int seqNum) {
 	//在GBN中,整个滑动窗口有唯一一个定时器,无需考虑seqNum
-	pUtils->printPacket("发送方定时器时间到，重发窗口内所有的报文", this->packetWaitingAck);
+	cout << "发送方定时器时间到，重发窗口内所有的报文" << endl;
+	queue <Packet> vicePacketWindow = this->packetWindow;
+	for(;vicePacketWindow.size()!=0;vicePacketWindow.pop())
+		pUtils->printPacket("报文：", vicePacketWindow.front());
+
 	pns->stopTimer(SENDER, seqNum);										//首先关闭定时器
 	pns->startTimer(SENDER, Configuration::TIME_OUT, seqNum);			//重新启动发送方定时器
-	pns->sendToNetworkLayer(RECEIVER, this->packetWaitingAck);			//重新发送数据包
+	
+	vicePacketWindow = this->packetWindow;
+	for (; vicePacketWindow.size() != 0; vicePacketWindow.pop())
+		pns->sendToNetworkLayer(RECEIVER, vicePacketWindow.front());			//重新发送窗口中的所有数据包
 
 }
