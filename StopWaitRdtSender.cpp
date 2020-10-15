@@ -25,7 +25,7 @@ bool StopWaitRdtSender::send(const Message &message) {
 	if (this->waitingState) { //发送方处于等待确认状态
 		return false;
 	}
-
+	
 	this->packetWaitingAck.acknum = -1; //忽略该字段
 	this->packetWaitingAck.seqnum = this->expectSequenceNumberSend;
 	this->packetWaitingAck.checksum = 0;

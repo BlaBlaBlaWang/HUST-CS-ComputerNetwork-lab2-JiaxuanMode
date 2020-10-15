@@ -2,8 +2,10 @@
 //
 //#define GBN_RDT_RECEIVER_H 1
 //#define GBN_RDT_SENDER_H 1
+//#define NONE_GBN_RDT_SENDER_MODE 1
 #define STOP_WAIT_RDT_RECEIVER_H 1
 #define STOP_WAIT_RDT_SENDER_H 1
+#define NONE_STOP_WAIT_RDT_SENDER_MODE 1
 #include "stdafx.h"
 #include "Global.h"
 #include "RdtSender.h"
@@ -16,9 +18,16 @@
 
 int main(int argc, char* argv[])
 {
-	RdtSender *ps = new GBNRdtSender();
-	RdtReceiver * pr = new GBNRdtReceiver();
-	
+	RdtSender* ps = NULL;
+	RdtReceiver* pr = NULL;
+
+	//ps = new GBNRdtSender();
+	//pr = new GBNRdtReceiver();
+
+	ps = new StopWaitRdtSender();
+	pr = new StopWaitRdtReceiver();
+
+
 //	pns->setRunMode(0);  //VERBOS模式
 	pns->setRunMode(1);  //安静模式
 	pns->init();
