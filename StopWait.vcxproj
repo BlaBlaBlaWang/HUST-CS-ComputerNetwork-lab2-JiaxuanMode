@@ -90,6 +90,8 @@
   <ItemGroup>
     <ClCompile Include="GBNRdtReceiver.cpp" />
     <ClCompile Include="GBNRdtSender.cpp" />
+    <ClCompile Include="SRRdtReceiver.cpp" />
+    <ClCompile Include="SRRdtSender.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -107,6 +109,8 @@
     <ClInclude Include="RandomEventEnum.h" />
     <ClInclude Include="RdtReceiver.h" />
     <ClInclude Include="RdtSender.h" />
+    <ClInclude Include="SRRdtReceiver.h" />
+    <ClInclude Include="SRRdtSender.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="StopWaitRdtReceiver.h" />
     <ClInclude Include="StopWaitRdtSender.h" />
