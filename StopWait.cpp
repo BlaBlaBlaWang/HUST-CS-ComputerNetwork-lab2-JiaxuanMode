@@ -14,11 +14,15 @@ int main(int argc, char* argv[])
 {
 	RdtSender* ps = NULL;
 	RdtReceiver* pr = NULL;
+	FILE* newOut = NULL;
 
 #ifndef NONE_GBN_RDT_SENDER_MODE
 	ps = new GBNRdtSender();
 	pr = new GBNRdtReceiver();
 	cout << "GBN Online" << endl;
+
+	freopen_s(&newOut, "result.txt", "w", stdout);
+	//将输出重定向到文件
 #endif // !NONE_GBN_RDT_SENDER_MODE
 
 #ifndef NONE_STOP_WAIT_RDT_SENDER_MODE
@@ -41,7 +45,7 @@ int main(int argc, char* argv[])
 	delete pr;
 	delete pUtils;									//指向唯一的工具类实例，只在main函数结束前delete
 	delete pns;										//指向唯一的模拟网络环境类实例，只在main函数结束前delete
-	
+	fclose(newOut);
 	return 0;
 }
 

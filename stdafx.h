@@ -8,6 +8,7 @@
 #include "targetver.h"
 
 #include <stdio.h>
+#include<fstream>
 #include <tchar.h>
 #include <queue>
 

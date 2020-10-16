@@ -12,6 +12,19 @@
 	{
 	}
 
+	void GBNRdtSender::printSlideWindow()
+	{
+		cout << "[[[[[[[[[滑动窗口移动]]]]]]]]]]" << endl;
+		queue <Packet> vicePacketWindow = this->packetWindow;
+		for (int i = 0; vicePacketWindow.size() != 0; vicePacketWindow.pop(), i++)
+		{
+			printf("滑动窗口第%d个", i);
+			pUtils->printPacket("报文：", vicePacketWindow.front());
+		}
+		cout << "[[[[[[[[[滑动窗口打印结束]]]]]]]]]]" << endl;
+		return;
+	}
+
 	bool GBNRdtSender::getWaitingState() {
 		
 		if (this->packetWindow.size() == this->windowSize)
@@ -43,7 +56,7 @@
 			this->packetWindow.back().checksum = pUtils->calculateCheckSum(this->packetWindow.back());
 			pUtils->printPacket("发送方发送报文", this->packetWindow.back());
 			pns->sendToNetworkLayer(RECEIVER, this->packetWindow.back());								//调用模拟网络环境的sendToNetworkLayer，通过网络层发送到对方
-
+			this->printSlideWindow();
 			if (this->base==this->nextSequenceNumber)
 				pns->startTimer(SENDER, Configuration::TIME_OUT, this->base);	//以第一个元素为基准设置超时，启动发送方定时器
 
@@ -67,8 +80,11 @@
 				/*注意ACK报文的序列号来自包的acknum成员*/
 				this->base = (ackPkt.acknum + 1) %8;
 				/*base的更新应当参照自顶向下方法*/
-				while(this->packetWindow.size() != 0&&this->packetWindow.front().seqnum!=this->base)
-					this->packetWindow.pop();
+				if (this->packetWindow.size() != 0 && this->packetWindow.front().seqnum != this->base) {
+					while (this->packetWindow.size() != 0 && this->packetWindow.front().seqnum != this->base)
+						this->packetWindow.pop();
+					this->printSlideWindow();
+				}
 				/*窗口队列出队直到第一个的序号与新的base相同*/
 				if(this->packetWindow.size()!=0)
 				/*由于牵扯到模数，因此不光要看nextSequenceNum和base两者是否相等来决定是否重启重传，还要看窗口的大小是否为0，准确的说一个窗口大小为0即可*/
