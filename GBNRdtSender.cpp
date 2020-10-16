@@ -3,43 +3,53 @@
 #include "Global.h"
 #include "GBNRdtSender.h"
 
-	GBNRdtSender::GBNRdtSender() :nextseqnum(0), waitingState(false)
+	GBNRdtSender::GBNRdtSender() :nextSequenceNumber(0), waitingState(false),base(0)		
+	/*在初始化时，waitingState必然是false，因为sender一开始是能发送的*/
 	{
 	}
-
 
 	GBNRdtSender::~GBNRdtSender()
 	{
 	}
 
-
-
 	bool GBNRdtSender::getWaitingState() {
-		return waitingState;
+		
+		if (this->packetWindow.size() == this->windowSize)
+		/*如果使用简单的大小关系比较，则与模运算的序号冲突*/
+			return true;
+		else
+			return false;
+	/*上层应用层调用先看waitingstate是否为true，针对GBN，如果窗口满了，相当于处在等待状态，因此返回true，应用层收到后等待下一次发送；反之则返回false
+	看似更为高明的应该是在下面对queue进行操作时实时判断是否窗口满，如果窗口满了就将类中的waitingState变量进行设置，而本函数只需要返回waitingState就可以
+	但这样会增大代码量和时间复杂度，还不如更为简洁的本函数*/
 	}
-
+	
 	int GBNRdtSender::windowSize = 4;
 	//在GBNRdtSender的定义之外定义static数据类型，规范窗口的大小，窗口中的报文用queue进行管理，并于windowSize进行比较
+	//其实用非静态成员变量也可以，这里只是多一种尝试
 
 	bool GBNRdtSender::send(const Message& message) {
-		if (this->nextseqnum>=this->base+this->windowSize) { //发送方处于等待确认状态
+		if (this->packetWindow.size()==this->windowSize) { //发送方的窗口已满，拒绝发送
+		/*如果使用简单的大小关系比较，则与模运算的序号冲突*/
 			return false;
 		}
 		else {
 			const Packet& insertPacket = Packet::Packet();
 			this->packetWindow.push(insertPacket);
 			this->packetWindow.back().acknum = -1; //忽略该字段
-			this->packetWindow.back().seqnum = this->nextseqnum;
+			this->packetWindow.back().seqnum = this->nextSequenceNumber;
 			this->packetWindow.back().checksum = 0;
 			memcpy(this->packetWindow.back().payload, message.data, sizeof(message.data));
 			this->packetWindow.back().checksum = pUtils->calculateCheckSum(this->packetWindow.back());
 			pUtils->printPacket("发送方发送报文", this->packetWindow.back());
 			pns->sendToNetworkLayer(RECEIVER, this->packetWindow.back());								//调用模拟网络环境的sendToNetworkLayer，通过网络层发送到对方
 
-			if (this->base==this->nextseqnum)
-				pns->startTimer(SENDER, Configuration::TIME_OUT, this->packetWindow.front().seqnum);	//以第一个元素为基准设置超时			//启动发送方定时器
+			if (this->base==this->nextSequenceNumber)
+				pns->startTimer(SENDER, Configuration::TIME_OUT, this->base);	//以第一个元素为基准设置超时，启动发送方定时器
 
-			this->nextseqnum = (this->nextseqnum++) % 8; //接收序号在0-7之间切换																			//进入等待状态
+			this->nextSequenceNumber = (++this->nextSequenceNumber) % 8; //接收序号在0-7之间切换
+			/*++千万别放到后面！*/
+			/*如果序号数和窗口大小相同，则可能会因为确认报文以窗口大小为单位丢失，而引起数据报文以窗口大小为单位重复传输*/
 			return true;
 		}
 	}
@@ -48,20 +58,25 @@
 		//检查校验和是否正确
 		int checkSum = pUtils->calculateCheckSum(ackPkt);
 
-		//如果校验和正确，并且确认序号=发送方已发送并等待确认的数据包序号
+		//如果校验和正确就调整base和计时器
+		/*并且，只有在确认序号=发送方已发送并等待确认的数据包序号才出队列！*/
 		if (checkSum == ackPkt.checksum) {
-			this->packetWindow.pop();
-			this->base = ackPkt.acknum + 1;
-			if(this->base==this->nextseqnum) {
+			{
 				pUtils->printPacket("发送方正确收到确认", ackPkt);
-				pns->stopTimer(SENDER, ackPkt.seqnum);		//关闭定时器
-			}
-			else {
-				pns->stopTimer(SENDER, ackPkt.seqnum);										//首先关闭定时器
-				pns->startTimer(SENDER, Configuration::TIME_OUT, ackPkt.seqnum);			//重新启动发送方定时器
+				pns->stopTimer(SENDER, this->base);		//关闭定时器
+				/*注意ACK报文的序列号来自包的acknum成员*/
+				this->base = (ackPkt.acknum + 1) %8;
+				/*base的更新应当参照自顶向下方法*/
+				while(this->packetWindow.size() != 0&&this->packetWindow.front().seqnum!=this->base)
+					this->packetWindow.pop();
+				/*窗口队列出队直到第一个的序号与新的base相同*/
+				if(this->packetWindow.size()!=0)
+				/*由于牵扯到模数，因此不光要看nextSequenceNum和base两者是否相等来决定是否重启重传，还要看窗口的大小是否为0，准确的说一个窗口大小为0即可*/
+					pns->startTimer(SENDER, Configuration::TIME_OUT, this->base);				//如果窗口中还有待确认的报文，就重新启动发送方定时器
+					/*注意重启后定时器的序号来自发送方窗口中的最前项，也就是base指定的*/
 			}
 		}
-		else {}	//GBN中如果包出现了错误就什么也不做
+		else {}	//GBN中如果包在校验上出现了错误就什么也不做
 	}
 
 	void GBNRdtSender::timeoutHandler(int seqNum) {
