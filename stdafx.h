@@ -15,15 +15,15 @@
 // TODO: 在此处引用程序需要的其他头文件
 #pragma comment (lib,"netsimlib.lib")
 
-//#define GBN_RDT_RECEIVER_H 1
-//#define GBN_RDT_SENDER_H 1
-//#define NONE_GBN_RDT_SENDER_MODE 1
+#define GBN_RDT_RECEIVER_H 1
+#define GBN_RDT_SENDER_H 1
+#define NONE_GBN_RDT_SENDER_MODE 1
 #define STOP_WAIT_RDT_RECEIVER_H 1
 #define STOP_WAIT_RDT_SENDER_H 1
 #define NONE_STOP_WAIT_RDT_SENDER_MODE 1
-#define TCP_RDT_RECEIVER_H 1
-#define TCP_RDT_SENDER_H 1
-#define NONE_TCP_RDT_SENDER_MODE 1
+//#define TCP_RDT_RECEIVER_H 1
+//#define TCP_RDT_SENDER_H 1
+//#define NONE_TCP_RDT_SENDER_MODE 1
 #define SR_RDT_RECEIVER_H 1
 #define SR_RDT_SENDER_H 1
 #define NONE_SR_RDT_SENDER_MODE 1

@@ -3,7 +3,7 @@
 #include "Global.h"
 #include "TCPRdtSender.h"
 
-	TCPRdtSender::TCPRdtSender() :nextSequenceNumber(0), waitingState(false),base(0)		
+	TCPRdtSender::TCPRdtSender() :nextSequenceNumber(0), waitingState(false),base(0),surplusAck(0)
 	/*在初始化时，waitingState必然是false，因为sender一开始是能发送的*/
 	{
 	}
@@ -82,38 +82,59 @@
 		if (checkSum == ackPkt.checksum) {
 			{
 				pUtils->printPacket("发送方正确收到确认", ackPkt);
-				pns->stopTimer(SENDER, this->base);		//关闭定时器
-				/*注意ACK报文的序列号来自包的acknum成员*/
-				this->base = (ackPkt.acknum + 1) %8;
-				/*base的更新应当参照自顶向下方法*/
-				if (this->packetWindow.size() != 0 && this->packetWindow.front().seqnum != this->base) {
-					while (this->packetWindow.size() != 0 && this->packetWindow.front().seqnum != this->base)
-						this->packetWindow.pop();
-					this->printSlideWindow();
+				if (this->base != ackPkt.seqnum)	//如果收到的下一期望序号和当前的base不同，说明窗口内报文成功传送到接收方，窗口可以移动
+				{
+					this->surplusAck = 0;	//窗口移动，将冗余ACK数归零
+					pns->stopTimer(SENDER, this->base);		//关闭定时器
+					/*注意ACK报文的序列号来自包的acknum成员*/
+					this->base = ackPkt.seqnum;
+					/*base的更新应当参照自顶向下方法的TCP部分，这里的seqnum是下一个期待的序号*/
+					if (this->packetWindow.size() != 0 && this->packetWindow.front().seqnum != this->base) {
+						while (this->packetWindow.size() != 0 && this->packetWindow.front().seqnum != this->base)
+							this->packetWindow.pop();
+						this->printSlideWindow();
+					}
+					/*窗口队列出队直到第一个的序号与新的base相同*/
+					if (this->packetWindow.size() != 0)
+						/*由于牵扯到模数，因此不光要看nextSequenceNum和base两者是否相等来决定是否重启重传，还要看窗口的大小是否为0，准确的说一个窗口大小为0即可*/
+						pns->startTimer(SENDER, Configuration::TIME_OUT, this->base);				//如果窗口中还有待确认的报文，就重新启动发送方定时器
+						/*注意重启后定时器的序号来自发送方窗口中的最前项，也就是base指定的*/
 				}
-				/*窗口队列出队直到第一个的序号与新的base相同*/
-				if(this->packetWindow.size()!=0)
-				/*由于牵扯到模数，因此不光要看nextSequenceNum和base两者是否相等来决定是否重启重传，还要看窗口的大小是否为0，准确的说一个窗口大小为0即可*/
-					pns->startTimer(SENDER, Configuration::TIME_OUT, this->base);				//如果窗口中还有待确认的报文，就重新启动发送方定时器
-					/*注意重启后定时器的序号来自发送方窗口中的最前项，也就是base指定的*/
+				else
+				{
+					this->surplusAck++;
+					if (this->surplusAck == 3)	//如果冗余ACK数加到3，就重传窗口内的全部报文
+					{
+						cout << "发送方收到三个冗余ACK，重发窗口内所有的报文" << endl;
+						queue <Packet> vicePacketWindow = this->packetWindow;
+						for (; vicePacketWindow.size() != 0; vicePacketWindow.pop())
+							pUtils->printPacket("报文：", vicePacketWindow.front());
+
+						pns->stopTimer(SENDER, this->base);										//首先关闭定时器
+						pns->startTimer(SENDER, Configuration::TIME_OUT, this->base);			//重新启动发送方定时器
+
+						vicePacketWindow = this->packetWindow;
+						for (; vicePacketWindow.size() != 0; vicePacketWindow.pop())
+							pns->sendToNetworkLayer(RECEIVER, vicePacketWindow.front());			//重新发送窗口中的所有数据包
+						
+						this->surplusAck = 0;	//全部重传后，将冗余ACK的数量归0
+					}
+				}
 			}
 		}
 		else {}	//GBN中如果包在校验上出现了错误就什么也不做
 	}
 
 	void TCPRdtSender::timeoutHandler(int seqNum) {
-		//在GBN中,整个滑动窗口有唯一一个定时器,无需考虑seqNum
-		cout << "发送方定时器时间到，重发窗口内所有的报文" << endl;
-		queue <Packet> vicePacketWindow = this->packetWindow;
-		for(;vicePacketWindow.size()!=0;vicePacketWindow.pop())
-			pUtils->printPacket("报文：", vicePacketWindow.front());
+		//在TCP中,整个滑动窗口有唯一一个定时器,无需考虑seqNum
+		//和GBN不同，TCP只需要重传base序号对应的的报文就可以
+		cout << "发送方定时器时间到，重发窗口内的base报文" << endl;
+		pUtils->printPacket("报文：", this->packetWindow.front());
 
 		pns->stopTimer(SENDER, seqNum);										//首先关闭定时器
 		pns->startTimer(SENDER, Configuration::TIME_OUT, seqNum);			//重新启动发送方定时器
 	
-		vicePacketWindow = this->packetWindow;
-		for (; vicePacketWindow.size() != 0; vicePacketWindow.pop())
-			pns->sendToNetworkLayer(RECEIVER, vicePacketWindow.front());			//重新发送窗口中的所有数据包
+		pns->sendToNetworkLayer(RECEIVER, this->packetWindow.front());			//重新发送窗口中的base对应数据包
 
 	}
 #endif

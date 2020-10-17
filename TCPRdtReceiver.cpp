@@ -7,7 +7,8 @@
 	{
 		lastAckPkt.acknum = -1; //初始状态下，上次发送的确认包的确认序号为-1，使得当第一个接受的数据包出错时该确认报文的确认号为-1
 		lastAckPkt.checksum = 0;
-		lastAckPkt.seqnum = -1;	//忽略该字段
+		lastAckPkt.seqnum = 0;	
+		/*该字段初值为0，用于应对TCP的需求，否则如果第一个报文就没有成功接收，则下一个报文的发送方base就会错误*/
 		for (int i = 0; i < Configuration::PAYLOAD_SIZE; i++) {
 			lastAckPkt.payload[i] = '.';
 		}
@@ -36,14 +37,13 @@
 			pns->delivertoAppLayer(RECEIVER, msg);
 			
 			lastAckPkt.acknum = packet.seqnum; //确认序号等于收到的报文序号
-			lastAckPkt.seqnum = packet.seqnum;
+			this->expectSequenceNumberRcvd = (++this->expectSequenceNumberRcvd)% 8;
+			lastAckPkt.seqnum = this->expectSequenceNumberRcvd;	//通过响应报文中的seqnum字段指明下一个想要收到的报文的序号，方便后面的sender快速TCP重传设置
 			memcpy(lastAckPkt.payload, packet.payload, sizeof(packet.payload));
 			lastAckPkt.checksum = pUtils->calculateCheckSum(lastAckPkt);
 			pUtils->printPacket("接收方发送确认报文", lastAckPkt);
 			pns->sendToNetworkLayer(SENDER, lastAckPkt);	//调用模拟网络环境的sendToNetworkLayer，通过网络层发送确认报文到对方
 
-			this->expectSequenceNumberRcvd = (++this->expectSequenceNumberRcvd)% 8; 
-			/*和发送方窗口大小对应，接收序号在0-3之间切换*/
 		}
 		else {
 			if (checkSum != packet.checksum) {

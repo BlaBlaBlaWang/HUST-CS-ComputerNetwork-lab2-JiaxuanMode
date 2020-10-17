@@ -11,6 +11,7 @@ private:
 	static int windowSize;
 	queue <Packet> packetWindow;	//已发送并等待Ack的数据包queue，根据窗口大小，一共维护4个实例的queue队列
 	int base;						//记录发送窗口的当前序号
+	int surplusAck;
 
 public:
 
