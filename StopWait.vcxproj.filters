@@ -13,6 +13,33 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
     </Filter>
+    <Filter Include="头文件\NaiveStopWait">
+      <UniqueIdentifier>{27f7aed7-df2b-460e-88c3-92b0d65276b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\GBN">
+      <UniqueIdentifier>{22adcb6e-52c4-4f82-b2aa-57e121b45832}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\SR">
+      <UniqueIdentifier>{e562e335-1d8c-41f0-a002-c146c7beeb2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\SimpleTCP">
+      <UniqueIdentifier>{061c5351-2ce9-47ad-bdbd-62969458f7f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\NaiveStopWait">
+      <UniqueIdentifier>{c9d463cd-f4ab-4398-b38a-57cbb15f291b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\GBN">
+      <UniqueIdentifier>{9327d51e-1a0a-4a87-942a-662d1b79f317}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\SR">
+      <UniqueIdentifier>{6f44b1ae-4519-4b63-a340-e85660d54769}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\SimpleTCP">
+      <UniqueIdentifier>{0b8bf159-fbc6-4cfe-b49f-4004701464fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\OriginRdt">
+      <UniqueIdentifier>{f716e42f-b591-4e59-ad07-b95c4875dbfa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -22,28 +49,28 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="StopWaitRdtReceiver.cpp">
-      <Filter>源文件</Filter>
+      <Filter>源文件\NaiveStopWait</Filter>
     </ClCompile>
     <ClCompile Include="StopWaitRdtSender.cpp">
-      <Filter>源文件</Filter>
+      <Filter>源文件\NaiveStopWait</Filter>
     </ClCompile>
     <ClCompile Include="GBNRdtReceiver.cpp">
-      <Filter>源文件</Filter>
+      <Filter>源文件\GBN</Filter>
     </ClCompile>
     <ClCompile Include="GBNRdtSender.cpp">
-      <Filter>源文件</Filter>
+      <Filter>源文件\GBN</Filter>
     </ClCompile>
     <ClCompile Include="SRRdtReceiver.cpp">
-      <Filter>源文件</Filter>
+      <Filter>源文件\SR</Filter>
     </ClCompile>
     <ClCompile Include="SRRdtSender.cpp">
-      <Filter>源文件</Filter>
+      <Filter>源文件\SR</Filter>
     </ClCompile>
     <ClCompile Include="TCPRdtReceiver.cpp">
-      <Filter>源文件</Filter>
+      <Filter>源文件\SimpleTCP</Filter>
     </ClCompile>
     <ClCompile Include="TCPRdtSender.cpp">
-      <Filter>源文件</Filter>
+      <Filter>源文件\SimpleTCP</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -59,19 +86,7 @@
     <ClInclude Include="RandomEventEnum.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="RdtReceiver.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="RdtSender.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="stdafx.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="StopWaitRdtReceiver.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="StopWaitRdtSender.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="targetver.h">
@@ -81,22 +96,34 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="GBNRdtSender.h">
-      <Filter>头文件</Filter>
+      <Filter>头文件\GBN</Filter>
     </ClInclude>
     <ClInclude Include="GBNRdtReceiver.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="SRRdtSender.h">
-      <Filter>头文件</Filter>
+      <Filter>头文件\GBN</Filter>
     </ClInclude>
     <ClInclude Include="SRRdtReceiver.h">
-      <Filter>头文件</Filter>
+      <Filter>头文件\SR</Filter>
+    </ClInclude>
+    <ClInclude Include="SRRdtSender.h">
+      <Filter>头文件\SR</Filter>
+    </ClInclude>
+    <ClInclude Include="StopWaitRdtReceiver.h">
+      <Filter>头文件\NaiveStopWait</Filter>
+    </ClInclude>
+    <ClInclude Include="StopWaitRdtSender.h">
+      <Filter>头文件\NaiveStopWait</Filter>
     </ClInclude>
     <ClInclude Include="TCPRdtReceiver.h">
-      <Filter>头文件</Filter>
+      <Filter>头文件\SimpleTCP</Filter>
     </ClInclude>
     <ClInclude Include="TCPRdtSender.h">
-      <Filter>头文件</Filter>
+      <Filter>头文件\SimpleTCP</Filter>
+    </ClInclude>
+    <ClInclude Include="RdtReceiver.h">
+      <Filter>头文件\OriginRdt</Filter>
+    </ClInclude>
+    <ClInclude Include="RdtSender.h">
+      <Filter>头文件\OriginRdt</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
