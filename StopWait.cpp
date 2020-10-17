@@ -11,6 +11,8 @@
 #include "GBNRdtSender.h"
 #include "SRRdtReceiver.h"
 #include "SRRdtSender.h"
+#include "TCPRdtReceiver.h"
+#include "TCPRdtSender.h"
 
 int main(int argc, char* argv[])
 {
@@ -38,6 +40,16 @@ int main(int argc, char* argv[])
 	if(batMode==0)
 		freopen_s(&newOut, "result.txt", "w", stdout);
 #endif // !NONE_SR_RDT_SENDER_MODE
+
+#ifndef NONE_TCP_RDT_SENDER_MODE
+	ps = new TCPRdtSender();
+	pr = new TCPRdtReceiver();
+	cout << "TCP Online" << endl;
+	//指示当前的模式
+	if (batMode == 0)
+		freopen_s(&newOut, "result.txt", "w", stdout);
+	//如果没有使用批处理检查，则将输出重定向到文件
+#endif // !NONE_TCP_RDT_SENDER_MODE
 
 #ifndef NONE_STOP_WAIT_RDT_SENDER_MODE
 	ps = new StopWaitRdtSender();

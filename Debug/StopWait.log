@@ -1,36 +1,14 @@
 ﻿cl : 命令行 warning D9035: “Gm”选项已否决，并将在将来的版本中移除
   stdafx.cpp
 cl : 命令行 warning D9035: “Gm”选项已否决，并将在将来的版本中移除
+  TCPRdtSender.cpp
+  TCPRdtReceiver.cpp
   StopWaitRdtSender.cpp
   StopWaitRdtReceiver.cpp
   StopWait.cpp
   SRRdtSender.cpp
-E:\实验二-全套\模块二 RDT代码（学生用）\Windows VS2017\StopWait\SRRdtSender.cpp(19,16): warning C4018: “<”: 有符号/无符号不匹配
-E:\实验二-全套\模块二 RDT代码（学生用）\Windows VS2017\StopWait\SRRdtSender.cpp(37,12): warning C4018: “<”: 有符号/无符号不匹配
-E:\实验二-全套\模块二 RDT代码（学生用）\Windows VS2017\StopWait\SRRdtSender.cpp(38,8): warning C4018: “<”: 有符号/无符号不匹配
   SRRdtReceiver.cpp
-E:\实验二-全套\模块二 RDT代码（学生用）\Windows VS2017\StopWait\SRRdtReceiver.cpp(17,17): warning C4018: “<”: 有符号/无符号不匹配
-E:\实验二-全套\模块二 RDT代码（学生用）\Windows VS2017\StopWait\SRRdtReceiver.cpp(20,11): warning C4477: “printf”: 格式字符串“%d”需要类型“int”的参数，但可变参数 1 拥有了类型“_Ty”
-          with
-          [
-              _Ty=Packet
-          ]
-E:\实验二-全套\模块二 RDT代码（学生用）\Windows VS2017\StopWait\SRRdtReceiver.cpp(52,21): warning C4018: “<”: 有符号/无符号不匹配
   GBNRdtSender.cpp
   GBNRdtReceiver.cpp
   正在生成代码...
-GBNRdtReceiver.obj : warning LNK4075: 忽略“/EDITANDCONTINUE”(由于“/SAFESEH”规范)
-netsimlib.lib(DataStructure.obj) : warning LNK4099: 未找到 PDB“netsimlib.pdb”(使用“netsimlib.lib(DataStructure.obj)”或在“E:\实验二-全套\模块二 RDT代码（学生用）\Windows VS2017\StopWait\Debug\netsimlib.pdb”中寻找)；正在链接对象，如同没有调试信息一样
-netsimlib.lib(FileAppMessageFeeder.obj) : warning LNK4099: 未找到 PDB“netsimlib.pdb”(使用“netsimlib.lib(FileAppMessageFeeder.obj)”或在“E:\实验二-全套\模块二 RDT代码（学生用）\Windows VS2017\StopWait\Debug\netsimlib.pdb”中寻找)；正在链接对象，如同没有调试信息一样
-netsimlib.lib(FileAppMessageWriter.obj) : warning LNK4099: 未找到 PDB“netsimlib.pdb”(使用“netsimlib.lib(FileAppMessageWriter.obj)”或在“E:\实验二-全套\模块二 RDT代码（学生用）\Windows VS2017\StopWait\Debug\netsimlib.pdb”中寻找)；正在链接对象，如同没有调试信息一样
-netsimlib.lib(NetworkService.obj) : warning LNK4099: 未找到 PDB“netsimlib.pdb”(使用“netsimlib.lib(NetworkService.obj)”或在“E:\实验二-全套\模块二 RDT代码（学生用）\Windows VS2017\StopWait\Debug\netsimlib.pdb”中寻找)；正在链接对象，如同没有调试信息一样
-netsimlib.lib(NetworkServiceConfiguration.obj) : warning LNK4099: 未找到 PDB“netsimlib.pdb”(使用“netsimlib.lib(NetworkServiceConfiguration.obj)”或在“E:\实验二-全套\模块二 RDT代码（学生用）\Windows VS2017\StopWait\Debug\netsimlib.pdb”中寻找)；正在链接对象，如同没有调试信息一样
-netsimlib.lib(NetworkServiceSimulator.obj) : warning LNK4099: 未找到 PDB“netsimlib.pdb”(使用“netsimlib.lib(NetworkServiceSimulator.obj)”或在“E:\实验二-全套\模块二 RDT代码（学生用）\Windows VS2017\StopWait\Debug\netsimlib.pdb”中寻找)；正在链接对象，如同没有调试信息一样
-netsimlib.lib(RandomEvent.obj) : warning LNK4099: 未找到 PDB“netsimlib.pdb”(使用“netsimlib.lib(RandomEvent.obj)”或在“E:\实验二-全套\模块二 RDT代码（学生用）\Windows VS2017\StopWait\Debug\netsimlib.pdb”中寻找)；正在链接对象，如同没有调试信息一样
-netsimlib.lib(RandomEventList.obj) : warning LNK4099: 未找到 PDB“netsimlib.pdb”(使用“netsimlib.lib(RandomEventList.obj)”或在“E:\实验二-全套\模块二 RDT代码（学生用）\Windows VS2017\StopWait\Debug\netsimlib.pdb”中寻找)；正在链接对象，如同没有调试信息一样
-netsimlib.lib(RdtReceiver.obj) : warning LNK4099: 未找到 PDB“netsimlib.pdb”(使用“netsimlib.lib(RdtReceiver.obj)”或在“E:\实验二-全套\模块二 RDT代码（学生用）\Windows VS2017\StopWait\Debug\netsimlib.pdb”中寻找)；正在链接对象，如同没有调试信息一样
-netsimlib.lib(RdtSender.obj) : warning LNK4099: 未找到 PDB“netsimlib.pdb”(使用“netsimlib.lib(RdtSender.obj)”或在“E:\实验二-全套\模块二 RDT代码（学生用）\Windows VS2017\StopWait\Debug\netsimlib.pdb”中寻找)；正在链接对象，如同没有调试信息一样
-netsimlib.lib(stdafx.obj) : warning LNK4099: 未找到 PDB“netsimlib.pdb”(使用“netsimlib.lib(stdafx.obj)”或在“E:\实验二-全套\模块二 RDT代码（学生用）\Windows VS2017\StopWait\Debug\netsimlib.pdb”中寻找)；正在链接对象，如同没有调试信息一样
-netsimlib.lib(Tool.obj) : warning LNK4099: 未找到 PDB“netsimlib.pdb”(使用“netsimlib.lib(Tool.obj)”或在“E:\实验二-全套\模块二 RDT代码（学生用）\Windows VS2017\StopWait\Debug\netsimlib.pdb”中寻找)；正在链接对象，如同没有调试信息一样
-netsimlib.lib(Utils.obj) : warning LNK4099: 未找到 PDB“netsimlib.pdb”(使用“netsimlib.lib(Utils.obj)”或在“E:\实验二-全套\模块二 RDT代码（学生用）\Windows VS2017\StopWait\Debug\netsimlib.pdb”中寻找)；正在链接对象，如同没有调试信息一样
   StopWait.vcxproj -> E:\实验二-全套\模块二 RDT代码（学生用）\Windows VS2017\StopWait\Debug\StopWait.exe

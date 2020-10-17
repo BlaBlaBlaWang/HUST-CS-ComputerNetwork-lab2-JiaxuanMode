@@ -39,6 +39,12 @@
     <ClCompile Include="SRRdtSender.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="TCPRdtReceiver.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TCPRdtSender.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DataStructure.h">
@@ -84,6 +90,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="SRRdtReceiver.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="TCPRdtReceiver.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="TCPRdtSender.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
