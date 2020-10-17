@@ -14,6 +14,9 @@
 
 int main(int argc, char* argv[])
 {
+	int batMode = 1;
+	//为1表示当前使用了批处理程序检查
+
 	RdtSender* ps = NULL;
 	RdtReceiver* pr = NULL;
 	FILE* newOut = NULL;
@@ -23,15 +26,17 @@ int main(int argc, char* argv[])
 	pr = new GBNRdtReceiver();
 	cout << "GBN Online" << endl;
 	//指示当前的模式
-	freopen_s(&newOut, "result.txt", "w", stdout);
-	//将输出重定向到文件
+	if (batMode == 0)
+		freopen_s(&newOut, "result.txt", "w", stdout);
+	//如果没有使用批处理检查，则将输出重定向到文件
 #endif // !NONE_GBN_RDT_SENDER_MODE
 
 #ifndef NONE_SR_RDT_SENDER_MODE
 	ps = new SRRdtSender();
 	pr = new SRRdtReceiver();
 	cout << "SR Online" << endl;
-	freopen_s(&newOut, "result.txt", "w", stdout);
+	if(batMode==0)
+		freopen_s(&newOut, "result.txt", "w", stdout);
 #endif // !NONE_SR_RDT_SENDER_MODE
 
 #ifndef NONE_STOP_WAIT_RDT_SENDER_MODE
@@ -54,7 +59,9 @@ int main(int argc, char* argv[])
 	delete pr;
 	delete pUtils;									//指向唯一的工具类实例，只在main函数结束前delete
 	delete pns;										//指向唯一的模拟网络环境类实例，只在main函数结束前delete
-	fclose(newOut);
+	if(newOut!=NULL)
+		fclose(newOut);
+	/*必须要进行判断，因为你不能嗯关一个NULL的文件指针指向的文件*/
 	return 0;
 }
 
