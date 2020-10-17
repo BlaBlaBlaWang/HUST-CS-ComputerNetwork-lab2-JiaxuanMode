@@ -16,10 +16,16 @@
 	{
 		cout << "[[[[[[[[[滑动窗口移动]]]]]]]]]]" << endl;
 		queue <Packet> vicePacketWindow = this->packetWindow;
-		for (int i = 0; vicePacketWindow.size() != 0; vicePacketWindow.pop(), i++)
+		int i;
+		for (i = 0; vicePacketWindow.size() != 0; vicePacketWindow.pop(), i++)
 		{
-			printf("滑动窗口第%d个", i);
+			printf("滑动窗口第%d个，", i);
 			pUtils->printPacket("报文：", vicePacketWindow.front());
+		}
+		while (i != this->windowSize)
+		{
+			printf("滑动窗口第%d个为空且可用\n", i);
+			i++;
 		}
 		cout << "[[[[[[[[[滑动窗口打印结束]]]]]]]]]]" << endl;
 		return;
