@@ -105,9 +105,9 @@
 						//移动滑动窗口直到第一个未收到确认的成员或窗口中未收到确认成员为空
 					{
 						this->packetWindow.erase(this->packetWindow.begin());
-						this->printSlideWindow();
 						this->base = (++this->base) % 8;
 					}
+					this->printSlideWindow();	//由于inPacketWindow只有在收到的确认报文序号在发送窗口中并且不是冗余确认时才返回true，因此只要打印，要么窗口滑动，要么有窗口中报文得到确认并停止计时
 				}
 				//由于每个已发送报文都有单独的计时器，因此不用再像GBN一样判断是否重启计时器
 				else cout << "发送方收到的确认是老的确认/已经得到的确认" << endl;

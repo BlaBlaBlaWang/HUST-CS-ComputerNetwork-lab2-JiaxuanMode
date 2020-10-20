@@ -16,8 +16,7 @@
 		int i;
 		for (i = 0; i < this->packetWindow.size(); i++)
 		{
-			printf("滑动窗口第%d个，", i);
-			printf("该报文接收情况为：%d ", this->packetWindow[i]);	//针对SR，打印滑动窗口的同时还要打印滑动窗口中每个报文的接收状态
+			printf("滑动窗口第%d个，", i);	//针对SR的接收方，打印滑动窗口的同时不需要打印滑动窗口中每个报文的接收状态，因为他们都是缓存的报文
 			pUtils->printPacket("报文：", this->packetWindow[i]);
 		}
 		while (i != this->windowSize)
