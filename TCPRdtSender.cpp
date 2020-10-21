@@ -105,17 +105,13 @@
 					this->surplusAck++;
 					if (this->surplusAck == 3)	//如果冗余ACK数加到3，就重传窗口内的全部报文
 					{
-						cout << "发送方收到三个冗余ACK，重发窗口内所有的报文" << endl;
-						queue <Packet> vicePacketWindow = this->packetWindow;
-						for (; vicePacketWindow.size() != 0; vicePacketWindow.pop())
-							pUtils->printPacket("报文：", vicePacketWindow.front());
+						cout << "发送方收到三个冗余ACK，重发窗口内第一个报文" << endl;
+						pUtils->printPacket("报文：", this->packetWindow.front());
 
 						pns->stopTimer(SENDER, this->base);										//首先关闭定时器
 						pns->startTimer(SENDER, Configuration::TIME_OUT, this->base);			//重新启动发送方定时器
 
-						vicePacketWindow = this->packetWindow;
-						for (; vicePacketWindow.size() != 0; vicePacketWindow.pop())
-							pns->sendToNetworkLayer(RECEIVER, vicePacketWindow.front());			//重新发送窗口中的所有数据包
+						pns->sendToNetworkLayer(RECEIVER, this->packetWindow.front());			//重新发送窗口中的第一个数据包
 						
 						this->surplusAck = 0;	//全部重传后，将冗余ACK的数量归0
 					}
